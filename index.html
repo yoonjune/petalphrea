@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+  <body>
+  <a href="{{ url|safe }}">{{ url_linktext }}</a>
+  <div>
+  <form>
+  	<input type="submit" value="default" name="guestbook_name">
+  	<input type="submit" value="milk" name="guestbook_name">
+  	<input type="submit" value="toy" name="guestbook_name">
+  </form>
+  </div>
+      <hr>
+    {% for greeting in greetings %}
+      {% if greeting.user %}
+        <b>{{ greeting.user.email }}
+          {% if user and user.user_id() == greeting.user.identity %}
+            (You)
+          {% endif %}
+        </b> wrote:
+      {% else %}
+       An anonymous person wrote:
+      {% endif %}
+      {% if greeting.avatar %}
+      		<div><img src="/img/{{greeting.avatar}}"></img></div>
+      {% endif %}
+      <blockquote>{{ greeting.content }}</blockquote>
+    {% endfor %}
+
+    <form action="{{ upload_url }}" method="post" enctype="multipart/form-data">
+      <div><textarea name="content" rows="3" cols="60"></textarea></div>
+      <div><input type="file" name='img' value="load image">
+      		<input type="submit" value="Upload"></div>
+    </form>
+
+    <hr>
+  </body>
+</html>
+{% endautoescape %}

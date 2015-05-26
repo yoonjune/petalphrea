@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+  <body>
+  <a href="{{ url1|safe }}">{{ url_linktext1 }}</a>
+  <a href="{{ url2|safe }}">{{ url_linktext2 }}</a>
+  <a href="{{ url3|safe }}">{{ url_linktext3 }}</a>
+  </body>
+</html>
+{% endautoescape %}
