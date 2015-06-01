@@ -8,6 +8,7 @@ import jinja2
 import os
 import urllib
 import logging
+import json
 
 JINJA_ENVIRONMENT = jinja2.Environment(
         loader = jinja2.FileSystemLoader(os.path.dirname(__file__)), 
@@ -35,6 +36,7 @@ class Greeting(ndb.Model):
     content= ndb.StringProperty(indexed = False)
     avatar = ndb.BlobKeyProperty()
     date = ndb.DateTimeProperty(auto_now_add= True)
+    vote_count = ndb.IntegerProperty(default = 0)
 
 class MainPage(webapp2.RequestHandler):
     def get(self):
@@ -114,10 +116,22 @@ class Image(webapp2.RequestHandler):
         else:
             self.response.out.write('No image')
 # [END image_handler]
-    
+
+class VoteHandler(webapp2.RequestHandler):
+    def post(self):
+        logging.info(self.request.body)
+        data = json.loads(self.request.body)
+        logging.info(data['greetingKey'])
+        greeting = Greeting.get_by_id(int(data['greetingKey']), parent=guestbook_key(DEFAULT_GUESTBOOK_NAME))
+        #logging.info(greeting)
+        #greeting = ndb.Key(Greeting, 'ahBkZXZ-bW9tcy1wcmVzZW50cisLEglHdWVzdGJvb2siB2RlZmF1bHQMCxIIR3JlZXRpbmcYgICAgIDArwkM').get()
+        greeting.vote_count +=1
+        greeting.put()
+        self.response.out.write(json.dumps(({'storyvote':greeting.vote_count})))
     
 app = webapp2.WSGIApplication([
         ('/', MainPage), 
          ('/img/([^/]+)?', ViewPhoto),
          ('/upload', Guestbook),
+         ('/vote/', VoteHandler)
     ], debug=True)

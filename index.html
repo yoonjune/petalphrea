@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 {% autoescape true %}
 <html>
+<head>
+<base href="/">
+<meta http-equiv = "Content-Type" content="text/html; charset=utf-8">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+
+</head>
   <body>
   <a href="{{ url|safe }}">{{ url_linktext }}</a>
   <div>
@@ -21,6 +28,24 @@
       {% else %}
        An anonymous person wrote:
       {% endif %}
+      <div>
+      		<span class="voteCount">{{greeting.vote_count}}</span> | <a href="javascript:VoteUp('{{greeting.key.id()}}');">Vote Up Story</a>
+      </div>
+      <script type="text/javascript">
+		function VoteUp(greetingKey) {
+		alert("hahaha");
+			$.ajax({
+				type: "POST",
+				url : "/vote/",
+				dataType: 'json',
+				data : JSON.stringify({ "greetingKey" : greetingKey})
+			})
+			.done(function(data){
+				alert( "Vote Cast!!! Count is : " + data['storyvote']);
+				$('.voteCount').text(data['storyvote']);
+			});
+		};
+</script>
       {% if greeting.avatar %}
       		<div><img src="/img/{{greeting.avatar}}"></img></div>
       {% endif %}
