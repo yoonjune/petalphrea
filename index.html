@@ -1,64 +1,56 @@
 <!DOCTYPE html>
 {% autoescape true %}
 <html>
-<head>
-<base href="/">
-<meta http-equiv = "Content-Type" content="text/html; charset=utf-8">
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-
-
-</head>
-  <body>
-  <a href="{{ url|safe }}">{{ url_linktext }}</a>
-  <div>
-  <form>
-  	<input type="submit" value="default" name="guestbook_name">
-  	<input type="submit" value="milk" name="guestbook_name">
-  	<input type="submit" value="toy" name="guestbook_name">
-  </form>
-  </div>
-      <hr>
-    {% for greeting in greetings %}
-      {% if greeting.user %}
-        <b>{{ greeting.user.email }}
-          {% if user and user.user_id() == greeting.user.identity %}
-            (You)
-          {% endif %}
-        </b> wrote:
-      {% else %}
-       An anonymous person wrote:
-      {% endif %}
-      <div>
-      		<span class="voteCount">{{greeting.vote_count}}</span> | <a href="javascript:VoteUp('{{greeting.key.id()}}');">Vote Up Story</a>
-      </div>
-      <script type="text/javascript">
-		function VoteUp(greetingKey) {
-		alert("hahaha");
-			$.ajax({
-				type: "POST",
-				url : "/vote/",
-				dataType: 'json',
-				data : JSON.stringify({ "greetingKey" : greetingKey})
-			})
-			.done(function(data){
-				alert( "Vote Cast!!! Count is : " + data['storyvote']);
-				$('.voteCount').text(data['storyvote']);
-			});
-		};
-</script>
-      {% if greeting.avatar %}
-      		<div><img src="/img/{{greeting.avatar}}"></img></div>
-      {% endif %}
-      <blockquote>{{ greeting.content }}</blockquote>
-    {% endfor %}
-
-    <form action="{{ upload_url }}" method="post" enctype="multipart/form-data">
-      <div><textarea name="content" rows="3" cols="60"></textarea></div>
-      <div><input type="file" name='img' value="load image">
-      		<input type="submit" value="Upload"></div>
-    </form>
-
-    <hr>
+	<head>
+		<base href="/">
+		<meta http-equiv = "Content-Type" content="text/html; charset=utf-8">
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+		<script type="text/javascript" src="/js/script.js"></script>
+	</head>
+	<body>
+		<a href="{{ url|safe }}">{{ url_linktext }}</a>
+		<hr>
+		<div>
+			Select Category
+			<form>
+				<input type="submit" value="default" name="guestbook_name">
+				<input type="submit" value="milk" name="guestbook_name">
+				<input type="submit" value="toy" name="guestbook_name">
+			</form>
+  		</div>
+  		<hr>
+  				Current Catecory : {{guestbook_name}}
+  		<div>
+      		
+    			{% for greeting in greetings %}
+    			<p>
+      				{% if greeting.user %}
+        				{{ greeting.user.email }}
+          				{% if user and user.user_id() == greeting.user.identity %} 
+          					(You)
+          				{% endif %}
+        				
+      				{% else %}
+       					An anonymous person
+      				{% endif %}
+					
+					wrote : <a href="javascript:VoteUp('{{greeting.key.id()}}');">Like</a>:
+						<span class="voteCount{{greeting.key.id()}}">{{greeting.vote_count}}</span> 
+						<br>
+      				{% if greeting.avatar %}
+      					<img src="/img/{{greeting.avatar}}" width="480px"></img></div>
+      				{% endif %}
+      				<blockquote>{{ greeting.content }}</blockquote>
+      				</p>
+    			{% endfor %}
+		</div>
+		<hr>
+    	<form action="{{ upload_url }}" method="post" enctype="multipart/form-data">
+      		<div><textarea name="content" rows="3" cols="60"></textarea></div>
+      		<div><input type="file" name='img' value="load image">
+      			<input type="submit" value="Upload"></div>
+    	</form>
+    
   </body>
 </html>
 {% endautoescape %}

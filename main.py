@@ -119,15 +119,16 @@ class Image(webapp2.RequestHandler):
 
 class VoteHandler(webapp2.RequestHandler):
     def post(self):
+        global guestbook_name
         logging.info(self.request.body)
         data = json.loads(self.request.body)
         logging.info(data['greetingKey'])
-        greeting = Greeting.get_by_id(int(data['greetingKey']), parent=guestbook_key(DEFAULT_GUESTBOOK_NAME))
+        greeting = Greeting.get_by_id(int(data['greetingKey']), parent=guestbook_key(guestbook_name))
         #logging.info(greeting)
         #greeting = ndb.Key(Greeting, 'ahBkZXZ-bW9tcy1wcmVzZW50cisLEglHdWVzdGJvb2siB2RlZmF1bHQMCxIIR3JlZXRpbmcYgICAgIDArwkM').get()
         greeting.vote_count +=1
         greeting.put()
-        self.response.out.write(json.dumps(({'storyvote':greeting.vote_count})))
+        self.response.out.write(json.dumps(({'storyid':int(data['greetingKey']),'storyvote':greeting.vote_count})))
     
 app = webapp2.WSGIApplication([
         ('/', MainPage), 
