@@ -1,4 +1,3 @@
-# -*- coding: utf-8
 import webapp2
 from google.appengine.api import users
 from google.appengine.ext import ndb
@@ -43,6 +42,7 @@ class MainPage(webapp2.RequestHandler):
     def get(self):
         upload_url = blobstore.create_upload_url('/upload')
         
+        global guestbook_name 
         guestbook_name = self.request.get('guestbook_name', DEFAULT_GUESTBOOK_NAME)
         
         greetings_query = Greeting.query(ancestor=guestbook_key(guestbook_name)).order(-Greeting.date)
@@ -76,8 +76,9 @@ class Guestbook(blobstore_handlers.BlobstoreUploadHandler):
         # single entity group will be consistent. However, the write
         # rate to a single entity group should be limited to
         # ~1/second.
-        guestbook_name = self.request.get('guestbook_name',
-                                         DEFAULT_GUESTBOOK_NAME)
+        #guestbook_name = self.request.get('guestbook_name',
+         #                                 DEFAULT_GUESTBOOK_NAME)
+        global guestbook_name
         greeting = Greeting(parent=guestbook_key(guestbook_name))
 
         if users.get_current_user():
@@ -85,10 +86,8 @@ class Guestbook(blobstore_handlers.BlobstoreUploadHandler):
                     identity=users.get_current_user().user_id(),
                     email=users.get_current_user().email())
 
-        greeting.content = self.request.get('content')
-        logging.info(self.request.get('content'))
-        logging.info(self.request.get('content').encode('utf-8'))
-        logging.info(self.request.get('content').decode('utf-8'))
+        greeting.content = self.request.get('content').encoding('utf-8')
+        
         #Get image data
         uploadData = self.get_uploads('img')
         if uploadData :
@@ -131,32 +130,9 @@ class VoteHandler(webapp2.RequestHandler):
         greeting.put()
         self.response.out.write(json.dumps(({'storyid':int(data['greetingKey']),'storyvote':greeting.vote_count})))
     
-class CommentHandler(webapp2.RequestHandler):
-    def post(self):
-        logging.info('request.body = ' + self.request.body)
-        data = json.loads(self.request.body)
-        
-        content = data['comment']
-        guestbook = data['guestbook_name']
-
-        greeting = Greeting(parent=guestbook_key(guestbook))
-        if users.get_current_user():
-            greeting.user = User(
-                    identity=users.get_current_user().user_id(),
-                    email=users.get_current_user().email())
-            
-        
-        greeting.content = content
-       
-        greeting.put()
-               
-        query_params = {'guestbook_name': guestbook_name}
-        self.response.out.write(json.dumps(({'result':True,'redirect':'/?' + urllib.urlencode(query_params)})))
-        
 app = webapp2.WSGIApplication([
         ('/', MainPage), 
          ('/img/([^/]+)?', ViewPhoto),
          ('/upload', Guestbook),
-         ('/vote/', VoteHandler),
-          ('/comment/', CommentHandler),
+         ('/vote/', VoteHandler)
     ], debug=True)

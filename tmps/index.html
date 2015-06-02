@@ -2,9 +2,10 @@
 {% autoescape true %}
 <html>
 	<head>
-		<meta charset="utf-8">
+		<base href="/">
+		<meta http-equiv = "Content-Type" content="text/html; charset=utf-8">
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-		<script src="/js/script.js"></script>
+		<script type="text/javascript" src="/js/script.js"></script>
 	</head>
 	<body>
 		<a href="{{ url|safe }}">{{ url_linktext }}</a>
@@ -18,8 +19,7 @@
 			</form>
   		</div>
   		<hr>
-  			<input id="guestbook_name" value={{guestbook_name}} type = "hidden"></input>
-  				Category : {{guestbook_name}}
+  				Current Catecory : {{guestbook_name}}
   		<div>
       		
     			{% for greeting in greetings %}
@@ -45,11 +45,10 @@
     			{% endfor %}
 		</div>
 		<hr>
-    	<form id="form" action="#" method="post">
-      		<div><p><textarea title="댓글 내용" style="background-color:#EBEBEB;width:644px; height:64px" id="comment" name="comment" placeholder="댓글은 150자까지만 입력하실수 있습니다"></textarea></p>
-
-      			<p><a id="comment_save" style="cursor:pointer">등록</a></p>
-</div>
+    	<form action="{{ upload_url }}" method="post" enctype="multipart/form-data">
+      		<div><textarea name="content" rows="3" cols="60"></textarea></div>
+      		<div><input type="file" name='img' value="load image">
+      			<input type="submit" value="Upload"></div>
     	</form>
     
   </body>

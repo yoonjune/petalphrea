@@ -12,6 +12,9 @@ libraries :
      version : latest
 
 handlers :
+   - url: /template
+     static_dir: template
+
    - url : /js
      static_dir : static/js
      

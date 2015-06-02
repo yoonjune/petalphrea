@@ -1,4 +1,4 @@
-application : mom-present
+application : moms-present
 runtime : python27
 api_version : 1
 version : 1
@@ -12,5 +12,10 @@ libraries :
      version : latest
 
 handlers :
+   - url : /js
+     static_dir : static/js
+     
    - url : /.*
      script : main.app
+     
+
