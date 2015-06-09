@@ -1,0 +1,127 @@
+#container {
+	width : 940px;
+	margin : 0px auto;
+	padding : 20px;
+	border : 1px solid #bcbcbc;
+}
+
+ul{
+	margin-left:20px;
+	width : 100%
+}
+
+#container header {
+	padding : 20px;
+	margin-bottom:20px;
+	background-color: #615d59;
+	border : 1px solid #bcbcbc;
+	color: #fff;
+}
+
+#container header a {
+	color: #fff;
+	text-decoration: none;
+	width : 100px;
+}
+
+#container header #menu{
+	padding : 0;
+	position : absoulte;
+	
+}
+#container header #menu ul {
+	list-style : none;
+}
+#container header #menu li {
+	display : inline-block;
+	text-align : left;
+}
+#container header #menu a{
+	font-size : 17px;
+
+}
+#content {
+	width : 580px;
+	padding : 20px;
+	margin-bottom:20px;
+	float : left;
+	border : 1px solid #bcbcbc;
+}
+
+#categories{
+	width:260px;
+	padding : 20px;
+	margin-bottom : 20px;
+	float : right;
+	border : 1px solid #bcbcbc;
+}
+
+#comment {
+	background-color:#EBEBEB;
+	width:580px; 
+	height:64px;
+}
+#offcanvas{
+	position : absolute;
+	top : 0;
+	left : 0;
+	width : 260px;
+	min-height : 100%;
+	background : #45423F;
+	border-right : solid 1px #3c3936;
+	color : #fff;
+	text-align : left;
+	display : none;
+}
+
+#offcanvas ul {
+	margin : 0;
+	padding : 0;
+	list-style: none;
+}
+#offcanvas li a{
+	display: block;
+    padding: 0 10px;
+    height: 45px;
+    line-height: 45px;
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    text-decoration: none;
+}
+
+#mobile_header{
+	display : none;
+}
+
+
+
+footer {
+	clear : both;
+	padding : 20px;
+	border : 1px solid #bcbcbc;
+}
+
+@media screen and (max-width:786px){
+	#container {
+		width : auto;
+	}
+	#content {
+		float : none;
+		width: auto;
+	}
+	#categories {
+		float : none;
+		width : auto;
+	}
+	#comment {
+		width : 300px;
+	}
+	#mobile_header{
+		display : block;
+	}
+	#header{
+		display: none;
+	}
+}
