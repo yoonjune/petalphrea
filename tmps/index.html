@@ -1,56 +1,101 @@
-<!DOCTYPE html>
+<!DOCTYPE html5>
 {% autoescape true %}
 <html>
 	<head>
-		<base href="/">
-		<meta http-equiv = "Content-Type" content="text/html; charset=utf-8">
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-		<script type="text/javascript" src="/js/script.js"></script>
+		<script src="/js/script.js"></script>
+		<script src="/js/responsive.js"></script>
+		<link rel="stylesheet" href="css/main.css"/>
 	</head>
 	<body>
-		<a href="{{ url|safe }}">{{ url_linktext }}</a>
-		<hr>
-		<div>
-			Select Category
-			<form>
-				<input type="submit" value="default" name="guestbook_name">
-				<input type="submit" value="milk" name="guestbook_name">
-				<input type="submit" value="toy" name="guestbook_name">
-			</form>
-  		</div>
-  		<hr>
-  				Current Catecory : {{guestbook_name}}
-  		<div>
+		<aside id="offcanvas">
+			<nav id="menu">
+				<ul>
+					<li><a href="/?guestbook_name=all">전체</a></li>
+					<li><a href="/?guestbook_name=milk">우유</a></li>
+					<li><a href="/?guestbook_name=stroller">유모차</a></li>
+					<li><a href="/?guestbook_name=milkpowder">분유</a></li>
+					<li><a href="/?guestbook_name=bicycle">자전거</a></li>
+					<li><a href="/?guestbook_name=toy">장난감</a></li>
+				</ul>
+			</nav>
+		</aside>
+		<div id="container">
+			<header id="mobile_header">
+				<a onclick="toggleOffCanvasMenu();" class="toggle" href="#">Menu</a>
+				<h1><a href="http://moms-present.appspot.com">DDoduk</a></h1>
+			</header>
+			<header id="header">
+				<h1><a href="http://moms-present.appspot.com">DDoduk</a></h1>
+				<a href="{{ url|safe }}">{{ url_linktext }}</a>
+				
+				<nav id="menu">
+					<ul>
+						<li><a href="/?guestbook_name=all">전체</a></li>
+						<li><a href="/?guestbook_name=milk">우유</a></li>
+						<li><a href="/?guestbook_name=stroller">유모차</a></li>
+						<li><a href="/?guestbook_name=milkpowder">분유</a></li>
+						<li><a href="/?guestbook_name=bicycle">자전거</a></li>
+						<li><a href="/?guestbook_name=toy">장난감</a></li>
+					</ul>
+				</nav>
+			</header>
+			<section id="content">
+				<article>
+					<input id="guestbook_name" value={{guestbook_name}} type = "hidden"></input>
+  						Selected Category : {{guestbook_name}}
+  					<div>
       		
-    			{% for greeting in greetings %}
-    			<p>
-      				{% if greeting.user %}
-        				{{ greeting.user.email }}
-          				{% if user and user.user_id() == greeting.user.identity %} 
-          					(You)
-          				{% endif %}
-        				
-      				{% else %}
-       					An anonymous person
-      				{% endif %}
-					
-					wrote : <a href="javascript:VoteUp('{{greeting.key.id()}}');">Like</a>:
-						<span class="voteCount{{greeting.key.id()}}">{{greeting.vote_count}}</span> 
-						<br>
-      				{% if greeting.avatar %}
-      					<img src="/img/{{greeting.avatar}}" width="480px"></img></div>
-      				{% endif %}
-      				<blockquote>{{ greeting.content }}</blockquote>
-      				</p>
-    			{% endfor %}
+		    			{% for greeting in greetings %}
+		    			<p>
+		      				{% if greeting.user %}
+		        				{{ greeting.user.email }}
+		          				{% if user and user.user_id() == greeting.user.identity %} 
+		          					(You)
+		          				{% endif %}
+		        				
+		      				{% else %}
+		       					An anonymous person
+		      				{% endif %}
+							
+							wrote : <a href="javascript:VoteUp('{{greeting.key.id()}}');">Like</a>:
+								<span class="voteCount{{greeting.key.id()}}">{{greeting.vote_count}}</span> 
+								<br>
+		      				{% if greeting.avatar %}
+		      					<img src="/img/{{greeting.avatar}}" width="480px"></img></div>
+		      				{% endif %}
+		      				<blockquote>{{ greeting.content }}</blockquote>
+		      				</p>
+		    			{% endfor %}
+					</div>	
+				</article>
+				<hr>
+    			<form id="form" action="#" method="post">
+      				<div><p><textarea title="댓글 내용" id="comment" name="comment" placeholder="댓글은 150자까지만 입력하실수 있습니다"></textarea></p>
+	      				<p><a id="comment_save" style="cursor:pointer">등록</a></p>
+					</div>
+    			</form>
+			</section>
+			<aside id="categories">
+				<nav id="menu">
+					<ul>
+						<li><a href="#" >SQL</a> (1) </li>
+						<li><a href="#" >Sublime Text</a> (2) </li>
+						<li><a href="#" >Swift</a> (2 </li>
+						<li><a href="#" >Think</a> (1) </li>
+						<li><a href="#" >Tizen</a> (1) </li>
+						<li><a href="#" >Web</a> (4) </li>
+		 				<li><a href="#" >Windows</a> (2) </li>
+						<li><a href="#" >Xcode</a> (1) </li>
+					</ul>
+				</nav>
+			</aside>
+			<footer>
+				<a href="#">copyright</a>
+			</footer>
 		</div>
-		<hr>
-    	<form action="{{ upload_url }}" method="post" enctype="multipart/form-data">
-      		<div><textarea name="content" rows="3" cols="60"></textarea></div>
-      		<div><input type="file" name='img' value="load image">
-      			<input type="submit" value="Upload"></div>
-    	</form>
-    
   </body>
 </html>
 {% endautoescape %}
